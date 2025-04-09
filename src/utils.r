@@ -111,26 +111,26 @@ get_games <- function(data) {
     mutate(
       Year = clock::date_format(Date, format="%y"),
       rown = 1:n(),
-      ID = str_c(Team, y, "-MD", rown)
+      ID = str_c(Team, Year, "-MD", rown)
     ) |>
     filter(!str_detect(Match, "\\([:upper:]\\)")) |>
-    filter(!((y == 24 & Date > "2024-11-02") |
-              (y == 23 & Date > "2023-10-29") |
-              (y == 22 & Date > "2022-10-29"))) |>
-    select(Year, Date, ID, Team, Opp, Points, PResult, Goals:Goal_Kicks)
+    filter(!((Year == 24 & Date > "2024-11-02") |
+              (Year == 23 & Date > "2023-10-29") |
+              (Year == 22 & Date > "2022-10-29"))) |>
+    select(ID, Team, Year, Date, Opp, Points, PResult, Goals:Goal_Kicks)
 }
 
 #' get_season
-get_season <- function(data) {
-  id <- data$ID[1] |> str_replace("-MD1", "")
+# get_season <- function(data) {
+#   id <- data$ID[1] |> str_replace("-MD1", "")
 
-  data |> 
-    summarize(
-      Year = Year,
-      ID = id,
-      Team = Team,
-      Points = sum(Points),
-      AEWSOCC = factor(ifelse(ID %in% AEWSOCC, TRUE, FALSE)),
-      across(Goals:Goal_Kicks, ~ median(.x, na.rm=TRUE)),
-    )
-}
+#   data |> 
+#     summarize(
+#       Year = Year,
+#       ID = id,
+#       Team = Team,
+#       Points = sum(Points),
+#       AEWSOCC = factor(ifelse(ID %in% AEWSOCC, TRUE, FALSE)),
+#       across(Goals:Goal_Kicks, ~ median(.x, na.rm=TRUE)),
+#     )
+# }

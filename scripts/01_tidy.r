@@ -16,21 +16,30 @@ ameast <- tibble(y = rep(YEARS, each=length(TEAMS)), t = rep(TEAMS, times=length
     data = map2(y, t, ~ get_data(.x, .y)),
     ic = map(data, ~ get_ic(.x)),
     ooc = map(data, ~ get_ooc(.x)),
-    games = map(ic, ~ get_games(.x)),
-    season = map(games, ~ get_season(.x))
+    ic_games = map(ic, ~ get_games(.x))
   )
 
 # Save tidy data
 write_rds(ameast, here("data", "tidy", "ameast.rds"))
 
-# # Game-level Data
-# aeconf |> 
-#   pull(games) |>
-#   bind_rows() |>
-#   write_rds(here("data", "tidy", "games.rds"))
+game <- ameast |> 
+  pull(ic_games) |> 
+  bind_rows() |>
+  select(-any_of(DROP)) |>
+  mutate(across(
+    where(is.numeric) & ends_with("P") & !matches("AvgPP"),
+    ~ .x / 100
+  ))
 
-# # Season-level Data
-# aeconf |>
-#   pull(season) |>
-#   bind_rows() |>
-#   write_rds(here("data", "tidy", "season.rds"))
+season <- game |> 
+  group_by(Team, Year) |> 
+  summarize(
+    Points = sum(Points),
+    across(xG:Goal_Kicks, list(med = median, iqr = IQR)),
+    .groups = "drop"
+  ) |>
+  mutate(ID = str_c(Team, Year), .before=Team) |>
+  mutate(AEWSOCC = factor(ID %in% AEWSOCC), .after=Points)
+
+write_rds(game, here("data", "tidy", "game.rds"))
+write_rds(season, here("data", "tidy", "season.rds"))
