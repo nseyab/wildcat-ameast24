@@ -12,6 +12,3 @@
 
 # Raw data (do not track sensitive or original data)
 data/raw/
-
-# Tracker R Markdown
-tracker.Rmd
