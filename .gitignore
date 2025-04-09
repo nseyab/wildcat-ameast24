@@ -1,0 +1,17 @@
+# R Markdown and knitr cache
+*_cache/
+*.utf8.md
+*.knit.md
+
+# Output files
+*.html
+*.pdf
+
+# Mac system files
+.DS_Store
+
+# Raw data (do not track sensitive or original data)
+data/raw/
+
+# Tracker R Markdown
+tracker.Rmd
