@@ -221,7 +221,7 @@ font_add_google("Lora", "lora")
 showtext_auto()
 
 theme_set(
-  theme_pubclean(base_size = 20, base_family = "ssp") +
+  theme_classic(base_size = 20, base_family = "ssp") +
   theme(
     legend.position = "None",
     axis.line = element_line(color="#DCDEDF"),
@@ -230,7 +230,10 @@ theme_set(
     axis.text.y = element_blank(),
     axis.title = element_text(family = "lora", size = 24, color = "#263645"),
     axis.ticks = element_blank(),
-    plot.title = element_text(family = "lora", size = 32, face = "bold", color = "#263645")
+    plot.title = element_text(family = "lora", size = 32, face = "bold", color = "#263645"),
+    plot.subtitle = element_text(family = "ssp", size = 24, face = "bold", color = "#263645"),
+    plot.caption = element_text(family = "ssp", size = 24, face = "bold", color = "#263645"),
+    panel.grid = element_blank()
   )
 )
 

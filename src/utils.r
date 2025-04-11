@@ -120,17 +120,32 @@ get_games <- function(data) {
     select(ID, Team, Year, Date, Opp, Points, PResult, Goals:Goal_Kicks)
 }
 
-#' get_season
-# get_season <- function(data) {
-#   id <- data$ID[1] |> str_replace("-MD1", "")
+#' model_workflow(model_spec, data, response, remove_vars=NULL)
+model_workflow <- function(model_spec, data, response, remove_vars=NULL) {
+  formula <- as.formula(paste(response, "~ ."))
+  
+  rec <- recipe(formula, data=data)
 
-#   data |> 
-#     summarize(
-#       Year = Year,
-#       ID = id,
-#       Team = Team,
-#       Points = sum(Points),
-#       AEWSOCC = factor(ifelse(ID %in% AEWSOCC, TRUE, FALSE)),
-#       across(Goals:Goal_Kicks, ~ median(.x, na.rm=TRUE)),
-#     )
-# }
+  if (!is.null(remove_vars)) {
+    rec <- rec |> step_rm(all_of(remove_vars))
+  }
+
+  workflow() |>
+    add_recipe(rec) |>
+    add_model(model_spec) |>
+    fit(data = data)
+}
+
+#' get_preds(fit, data, response)
+get_preds <- function(fit, data, response) {
+  data |>
+    mutate(
+      .pred = predict(fit, new_data=data)$.pred_class,
+      .truth = .data[[response]]
+    )
+}
+
+#' get_key_pcs(loadings, threshold)
+get_key_pcs <- function(loadings, threshold=0.200) {
+  loadings |> filter(round(abs_est, 3) >= threshold) |> pull(PC)
+}
