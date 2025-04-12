@@ -133,32 +133,84 @@ tidy_ic <- function(data) {
     select(-row_n)
 }
 
-# #' model_workflow(model_spec, data, response, remove_vars=NULL)
-# model_workflow <- function(model_spec, data, response, remove_vars=NULL) {
-#   formula <- as.formula(paste(response, "~ ."))
+#' create_umap_rec
+create_umap_rec <- function(data) {
+  recipe(~., data=data) |>
+    update_role(ID, Team, Year, Date, Opp, new_role="id") |>
+    update_role(Points, Result, PResult, new_role="outcome") |>
+    step_YeoJohnson(all_numeric_predictors()) |>
+    step_normalize(all_numeric_predictors()) |>
+    step_umap(all_numeric_predictors(), neighbors=5, min_dist=0.4)
+}
+# , neighbors=7, min_dist=0.14
+
+
+#' create_umap_plot
+create_umap_plot <- function(split, rec) {
+
+  data <- rec |>
+    prep() |>
+    bake(new_data=NULL) |>
+    mutate(
+      Result = factor(Result, levels=c("W", "D", "L")),
+      PResult = factor(PResult, levels=c("TRUE", "FALSE")),
+      Anno = str_c(Team, "-", Opp, "-", Year)
+    ) 
+
+  sum_data <- data |>
+    group_by(Team, Year) |>
+    nest() |>
+    mutate(
+      Anno = str_c(Team, Year),
+      UMAP1_s = map_dbl(data, ~ mean(.x$UMAP1)),
+      UMAP2_s = map_dbl(data, ~ mean(.x$UMAP2)),
+      AEWSOCC = factor(ifelse(Anno %in% AEWSOCC, TRUE, FALSE), levels=c("TRUE", "FALSE"))
+    )
+
+  # Only show 2024 teams + all UNH years for feature-specific plots
+  if(split != "full"){
+    sum_data <- sum_data |> filter(str_detect(Anno, "UNH|24"))
+  }
+
+  p <- sum_data |>
+    ggplot(aes(x=UMAP1_s, y=UMAP2_s, shape=AEWSOCC, fill=Team, color=Team, alpha=Year)) +
+    geom_point(size=5, stroke=0.7) +
+    geom_text_repel(aes(label=Anno, color=Team), size=20, max.overlaps = 20, box.padding = 0.6, segment.color = NA) +
+    scale_alpha_manual(values = c(0.4, 0.4, 1)) +
+    scale_shape_manual(values = c(24, 25)) +
+    scale_fill_manual(values = PAL_SECONDARY) +
+    scale_color_manual(values = PAL_PRIMARY) +
+    labs(x=NULL, y=NULL) +
+    theme(
+      legend.position = "none", 
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(),
+    )
+}
+
+#' create_pca_rec
+create_pca_rec <- function(data) {
+  recipe(~., data=data) |>
+    update_role(ID, Team, Year, Date, Opp, new_role="id") |>
+    update_role(Points, Result, PResult, new_role="outcome") |>
+    step_YeoJohnson(all_numeric_predictors()) |>
+    step_normalize(all_numeric_predictors()) |>
+    step_pca(all_numeric_predictors(), threshold=0.8)
+}
+
+#' create_cpve_plot
+create_cpve_plot <- function(rec) {
+
+  data <- rec |>
+    prep()
   
-#   rec <- recipe(formula, data=data)
+  p <- data |>
+    tidy(3, type="variance") |>
+    filter(str_detect(terms, "cumulative percent")) |>
+    ggplot(aes(component, value)) +
+    geom_point(color="#001D52") +
+    geom_line(color="#001D52") +
+    geom_hline(yintercept=80, linetype="dashed", color="#CB4D0B") +
+    annotate("text", x=20, y=81, label="80% Threshold", color="#CB4D0B")
+}
 
-#   if (!is.null(remove_vars)) {
-#     rec <- rec |> step_rm(all_of(remove_vars))
-#   }
-
-#   workflow() |>
-#     add_recipe(rec) |>
-#     add_model(model_spec) |>
-#     fit(data = data)
-# }
-
-# #' get_preds(fit, data, response)
-# get_preds <- function(fit, data, response) {
-#   data |>
-#     mutate(
-#       .pred = predict(fit, new_data=data)$.pred_class,
-#       .truth = .data[[response]]
-#     )
-# }
-
-# #' get_key_pcs(loadings, threshold)
-# get_key_pcs <- function(loadings, threshold=0.200) {
-#   loadings |> filter(round(abs_est, 3) >= threshold) |> pull(PC)
-# }

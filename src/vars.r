@@ -285,14 +285,14 @@ theme_set(
   theme(
     legend.position = "None",
     axis.line = element_line(color="#DCDEDF"),
-    axis.text = element_text(family = "ssp", size = 18, color="#263645"),
+    axis.text = element_text(family = "ssp", size = 40, color="#263645"),
     axis.text.x = element_blank(),
     axis.text.y = element_blank(),
-    axis.title = element_text(family = "lora", size = 40, color = "#263645"),
+    axis.title = element_text(family = "lora", size = 54, color = "#263645"),
     axis.ticks = element_blank(),
-    plot.title = element_text(family = "lora", size = 48, face = "bold", color = "#263645"),
-    plot.subtitle = element_text(family = "ssp", size = 40, face = "bold", color = "#263645"),
-    plot.caption = element_text(family = "ssp", size = 40, face = "bold", color = "#263645"),
+    plot.caption = ggtext::element_markdown(family = "ssp", size = 54, face = "bold", color = "#263645"),
+    plot.title = element_text(family = "lora", size = 72, face = "bold", color = "#263645"),
+    plot.subtitle = element_text(family = "lora", size = 54, face = "bold", color = "#263645"),
     panel.grid = element_blank()
   )
 )
