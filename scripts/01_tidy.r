@@ -13,22 +13,27 @@ source(here("src", "vars.r"))
 
 ameast <- tibble(y = rep(YEARS, each=length(TEAMS)), t = rep(TEAMS, times=length(YEARS))) |>
   mutate(
-    data = map2(y, t, ~ get_data(.x, .y)),
-    ic = map(data, ~ get_ic(.x)),
-    ooc = map(data, ~ get_ooc(.x)),
-    ic_data = map(ic, ~ get_games(.x))
+    data = map2(y, t, ~ combine(.x, .y)),
+    ic = map(data, ~ extract_ic(.x)),
+    ooc = map(data, ~ extract_ooc(.x)),
+    ic_data = map(ic, ~ tidy_ic(.x))
   )
+
+ic_data <- ameast |> pull(ic_data) |> bind_rows()
+
+ic_eff <- ic_data |>
+  select(all_of(c(ID, RESPONSE, EFFICIENCY))) |>
+  mutate(across(SoTP:TIAP, ~ .x / 100))
+
+ic_vol <- ic_data |>
+  select(all_of(c(ID, RESPONSE, VOLUME)))
+
+ic_idn <- ic_data |>
+  select(all_of(c(ID, RESPONSE, IDENTITY)))
 
 # Save tidy data
 write_rds(ameast, here("data", "tidy", "ameast.rds"))
-
-ic_data <- ameast |> 
-  pull(ic_data) |> 
-  bind_rows() |>
-  select(-any_of(DROP)) |>
-  mutate(across(
-    where(is.numeric) & ends_with("P") & !matches("AvgPP"),
-    ~ .x / 100
-  ))
-
 write_rds(ic_data, here("data", "tidy", "ic_data.rds"))
+write_rds(ic_eff, here("data", "tidy", "ic_eff.rds"))
+write_rds(ic_vol, here("data", "tidy", "ic_vol.rds"))
+write_rds(ic_idn, here("data", "tidy", "ic_idn.rds"))

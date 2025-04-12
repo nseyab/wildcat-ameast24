@@ -172,41 +172,101 @@ AEWSOCC <- c(
   "UVM23", "UNH23", "UML23", "NJIT23", "ME23", "BING23", 
   "BING24", "UVM24", "UML24", "BRY24", "ME24", "UNH24")
 
-DROP <- c(
-  "Goals",
-  "Conceded_Goals",
+
+#---------------------------------
+# Data Split
+#---------------------------------
+ID <- c("ID", "Team", "Year", "Date", "Opp")
+
+RESPONSE <- c("Points", "Result", "PResult")
+
+EFFICIENCY <- c(
+  "SoTP", #Shots on Target %
+  "PAwSP", #Positional Attacks with Shot %
+  "CAwSP", #Counterattacks with Shots %
+  "CwSP", #Corners with Shot %
+  "FKwSP", #Free Kicks with Shot %
+  "CAP", #Crosses Accurate %
+  "ODWP", #Offensive Duels Won %
+  "SAoTP", #Shots Against on Target %
+  "DDWP", #Defensive Duels Won %
+  "ADWP", #Aerial Duels Won %
+  "STSP", #Sliding Tackles Successful %
+  "PAP", #Passes Accurate % 
+  "Possession",
+  "DWP", #Duels Won %
+  "LongPP", #Long Pass Percentage
+  "FwdPAP", #Forward Passes Accurate %
+  "BackPAP", #Back Passes Accurate %
+  "LatPAP", #Lateral Passes Accurate %
+  "LongPAP", #Long Passes Accurate %
+  "PtFTAP", #Passes to Final Third Accurate %
+  "ProgPAP", #Progressive Passes Accurate %
+  "SmPAP", #Smart Passes Accurate %
+  "TIAP" #Throw Ins Accurate %
+)
+
+VOLUME <- c(
+  "Shots",
   "SoT", #Shots on Target
+  "Positional_Attacks",
   "PAwS", #Positional Attacks with Shot
   "Counterattacks",
-  "CAwS", #Counterattack with Shot
-  "CAwSP", #Counterattack with Shot Percentage
-  "CwS", #Corner with Shot
+  "CAwS", #Counterattacks with Shots
+  "Corners",
+  "CwS", #Corners with Shot
   "Free_Kicks",
-  "FKwS", #Free Kick with Shot
-  "FKwSP", #Free Kick with Shot Percentage
+  "FKwS", #Free Kicks with Shot
+  "Crosses",
   "CA", #Crosses Accurate
+  "Offensive_Duels",
   "ODW", #Offensive Duels Won
-  "PA", #Passes Accurate
-  "DW", #Duels Won
+  "Offsides",
+  "Shots_Against",
   "SAoT", #Shots Against on Target
+  "Defensive_Duels",
   "DDW", #Defensive Duels Won
+  "Aerial_Duels",
   "ADW", #Aerial Duels Won
+  "Sliding_Tackles",
   "STS", #Sliding Tackles Successful
+  "Interceptions",
+  "Clearances",
+  "Fouls",
+  "Yellow_Cards",
+  "LLow", #Losses
+  "LMid",
+  "LHigh",
+  "RLow", #Recoveries
+  "RMid",
+  "RHigh",
+  "Forward_Passes",
   "FwdPA", #Forward Passes Accurate
+  "Back_Passes",
   "BackPA", #Back Passes Accurate
+  "Lateral_Passes",
   "LatPA", #Lateral Passes Accurate
+  "Long_Passes",
   "LongPA", #Long Passes Accurate
+  "Passes_to_Final_Third",
   "PtFTA", #Passes to Final Third Accurate
+  "Progressive_Passes",
   "ProgPA", #Progressive Passes Accurate
   "Smart_Passes",
   "SmPA", #Smart Passes Accurate
-  "SmPAP", #Smart Passes Accurate Percentage
-  "TIA", #Throw in Accurate
-  "Yellow_Cards",
-  "Penalties",
-  "Penalties_Converted",
-  "PCP", #Penalties Converted Percentage
-  "Red_Cards"
+  "Throw_Ins",
+  "TIA", #Throw Ins Accurate
+  "Goal_Kicks"
+)
+
+IDENTITY <- c(
+  "xG",
+  "xGA",
+  "Tempo",
+  "AvgPP", #Average Passes per Possession
+  "PPDA",
+  "ASD", #Average Shot Distance
+  "APL" #Average Pass Length
 )
 
 

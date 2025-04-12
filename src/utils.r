@@ -35,8 +35,8 @@ add_Opp <- function(data) {
     ungroup()
 }
 
-#' get_data
-get_data <- function(y, t) {
+#' combine
+combine <- function(y, t) {
   if (t == "New-Hampshire" | t == "UMASS-Lowell") {
     t1 <- t
     t2 <- str_replace(t, "-", " ")
@@ -86,66 +86,79 @@ get_data <- function(y, t) {
         Goals == Conceded_Goals ~ 1,
         Goals < Conceded_Goals ~ 0
       ),
-      PResult = ifelse(Points == 0, FALSE, TRUE)) |>
+      PResult = ifelse(Points == 0, FALSE, TRUE),
+      Result = case_when(
+        Points == 3 ~ "W",
+        Points == 1 ~ "D",
+        Points == 0 ~ "L"
+      ),
+      FwdPP = Forward_Passes / Passes,
+      BackPP = Back_Passes / Passes,
+      LatPP = Lateral_Passes / Passes,
+      PtFTPP = Passes_to_Final_Third / Passes,
+      ProgPP = Progressive_Passes / Passes,
+      SmPP = Smart_Passes / Passes
+    ) |>
     select(-c(Scheme, abbTeam))  
 
   return(data)
 }
 
-#' get_ic
-get_ic <- function(data) {
+#' extract_ic
+extract_ic <- function(data) {
   data |>
     filter(str_detect(Competition, "America East"))
 }
 
-#' get_ooc
-get_ooc <- function(data) {
+#' extract_ooc
+extract_ooc <- function(data) {
   data |>
     filter(str_detect(Competition, "Non-conference"))
 }
 
-#' get_games
-get_games <- function(data) {
+#' tidy_ic
+tidy_ic <- function(data) {
   data |>
     arrange(Date) |>
     mutate(
       Year = clock::date_format(Date, format="%y"),
-      rown = 1:n(),
-      ID = str_c(Team, Year, "-MD", rown)
+      row_n = 1:n(),
+      ID = str_c(Team, Year, "-MD", row_n)
     ) |>
+    # exclude non-regular season games
     filter(!str_detect(Match, "\\([:upper:]\\)")) |>
     filter(!((Year == 24 & Date > "2024-11-02") |
               (Year == 23 & Date > "2023-10-29") |
               (Year == 22 & Date > "2022-10-29"))) |>
-    select(ID, Team, Year, Date, Opp, Points, PResult, Goals:Goal_Kicks)
+    select(-row_n)
 }
 
-#' model_workflow(model_spec, data, response, remove_vars=NULL)
-model_workflow <- function(model_spec, data, response, remove_vars=NULL) {
-  formula <- as.formula(paste(response, "~ ."))
+# #' model_workflow(model_spec, data, response, remove_vars=NULL)
+# model_workflow <- function(model_spec, data, response, remove_vars=NULL) {
+#   formula <- as.formula(paste(response, "~ ."))
   
-  rec <- recipe(formula, data=data)
+#   rec <- recipe(formula, data=data)
 
-  if (!is.null(remove_vars)) {
-    rec <- rec |> step_rm(all_of(remove_vars))
-  }
+#   if (!is.null(remove_vars)) {
+#     rec <- rec |> step_rm(all_of(remove_vars))
+#   }
 
-  workflow() |>
-    add_recipe(rec) |>
-    add_model(model_spec) |>
-    fit(data = data)
-}
+#   workflow() |>
+#     add_recipe(rec) |>
+#     add_model(model_spec) |>
+#     fit(data = data)
+# }
 
-#' get_preds(fit, data, response)
-get_preds <- function(fit, data, response) {
-  data |>
-    mutate(
-      .pred = predict(fit, new_data=data)$.pred_class,
-      .truth = .data[[response]]
-    )
-}
+# #' get_preds(fit, data, response)
+# get_preds <- function(fit, data, response) {
+#   data |>
+#     mutate(
+#       .pred = predict(fit, new_data=data)$.pred_class,
+#       .truth = .data[[response]]
+#     )
+# }
 
-#' get_key_pcs(loadings, threshold)
-get_key_pcs <- function(loadings, threshold=0.200) {
-  loadings |> filter(round(abs_est, 3) >= threshold) |> pull(PC)
-}
+# #' get_key_pcs(loadings, threshold)
+# get_key_pcs <- function(loadings, threshold=0.200) {
+#   loadings |> filter(round(abs_est, 3) >= threshold) |> pull(PC)
+# }
