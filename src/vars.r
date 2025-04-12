@@ -228,11 +228,11 @@ theme_set(
     axis.text = element_text(family = "ssp", size = 18, color="#263645"),
     axis.text.x = element_blank(),
     axis.text.y = element_blank(),
-    axis.title = element_text(family = "lora", size = 24, color = "#263645"),
+    axis.title = element_text(family = "lora", size = 40, color = "#263645"),
     axis.ticks = element_blank(),
-    plot.title = element_text(family = "lora", size = 32, face = "bold", color = "#263645"),
-    plot.subtitle = element_text(family = "ssp", size = 24, face = "bold", color = "#263645"),
-    plot.caption = element_text(family = "ssp", size = 24, face = "bold", color = "#263645"),
+    plot.title = element_text(family = "lora", size = 48, face = "bold", color = "#263645"),
+    plot.subtitle = element_text(family = "ssp", size = 40, face = "bold", color = "#263645"),
+    plot.caption = element_text(family = "ssp", size = 40, face = "bold", color = "#263645"),
     panel.grid = element_blank()
   )
 )
@@ -255,7 +255,7 @@ PAL_SECONDARY <- c(
   "BRY" =  "#826E39", # #A98F42; # #826E39
   "ME" = "#79BDE8", # #082E58; # #79BDE8
   "NJIT" = "#FFFFFF", # #D22630; # #FFFFFF
-  "UMBC" = "#FDB515", # #000000; # #FDB515
+  "UMBC" = "#A67A05", # #000000; # #DA2128
   "UML" = "#000000", # #0067B1; # #000000
   "UNH" = "#FFFFFF", # #003591; # #FFFFFF
   "UVM" = "#FFD100" # #154734; # #FFD100
