@@ -21,19 +21,19 @@ ameast <- tibble(y = rep(YEARS, each=length(TEAMS)), t = rep(TEAMS, times=length
 
 ic_full <- ameast |> pull(ic_data) |> bind_rows() |> select(-c(Match, Competition, Duration))
 
-ic_eff <- ic_data |>
+ic_eff <- ic_full |>
   select(all_of(c(ID, RESPONSE, EFFICIENCY))) |>
   mutate(across(SoTP:TIAP, ~ .x / 100))
 
-ic_vol <- ic_data |>
+ic_vol <- ic_full |>
   select(all_of(c(ID, RESPONSE, VOLUME)))
 
-ic_idn <- ic_data |>
-  select(all_of(c(ID, RESPONSE, IDENTITY)))
+ic_ctrl <- ic_full |>
+  select(all_of(c(ID, RESPONSE, CONTROL)))
 
 # Save tidy data
 write_rds(ameast, here("data", "tidy", "ameast.rds"))
 write_rds(ic_full, here("data", "tidy", "ic_full.rds"))
 write_rds(ic_eff, here("data", "tidy", "ic_eff.rds"))
 write_rds(ic_vol, here("data", "tidy", "ic_vol.rds"))
-write_rds(ic_idn, here("data", "tidy", "ic_idn.rds"))
+write_rds(ic_ctrl, here("data", "tidy", "ic_ctrl.rds"))

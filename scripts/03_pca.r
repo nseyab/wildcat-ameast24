@@ -1,5 +1,5 @@
 # 03_pca.r
-# PCA across feature splits
+# PCA across feature sets
 
 library(tidyverse)
 library(here)
@@ -11,26 +11,26 @@ source(here("src", "utils.r"))
 source(here("src", "vars.r"))
 set.seed(103)
 
-pca <- tibble(split=c("eff", "idn", "vol")) |>
+pca <- tibble(set=c("CTRL", "EFF", "VOL")) |>
   mutate(
-    data = map(split, ~ read_rds(here("data", "tidy", paste0("ic_", .x, ".rds")))),
+    data = map(set, ~ read_rds(here("data", "tidy", paste0("ic_", .x, ".rds")))),
     rec = map(data, ~ create_pca_rec(.x))
   )
 
 write_rds(pca, here("models", "recipes", "pca.rds"))
 
-# plots <- pca |> mutate(plot = map(rec, ~ create_cpve_plot(.x))) |> pull(plot)
+plots <- pca |> mutate(plot = map(rec, ~ plot_cpve(.x))) |> pull(plot)
 
-# p <- plots[[1]] | plots[[2]] | plots[[3]] + 
-#   plot_annotation(title = "Cumulative Proportion of Variance Explained via PCA Components by Feature Set")
+p <- plots[[1]] | plots[[2]] | plots[[3]] + 
+  plot_annotation(title = "Cumulative Proportion of Variance Explained via PCA Components by Feature Set")
 
-# ggsave(here("figs", "p.png"), p, height=5, width=16.5, units="in", dpi="retina")
+ggsave(here("figs", "cpve.png"), p, height=5, width=16.5, units="in", dpi="retina")
 
 pca_baked <- pca |>
   mutate(
-    prep = map(rec, prep),
-    baked = map2(prep, split, ~ {
-      prefix <- str_c(str_to_upper(str_sub(.y, 1, 3)), "_PC")
+    prep = map(rec, ~ prep(.x)),
+    baked = map2(prep, set, ~ {
+      prefix <- str_c(.y, "_PC")
       
       bake(.x, new_data = NULL) |>
         rename_with(
@@ -41,6 +41,25 @@ pca_baked <- pca |>
         )
     })
   ) |>
-  select(split, baked)
+  select(set, baked)
 
 write_rds(pca_baked, here("models", "baked", "pca_baked.rds"))
+
+pca_season <- pca_baked |>
+  mutate(
+    season = map(baked, ~ .x |> 
+      group_by(Team, Year) |>
+      summarize(
+        across(matches("_PC\\d{2}$"), list(mean = mean, sd = sd), .names = "{.col}_{.fn}"),
+        .groups="drop"
+      ) |>
+      mutate(
+        ID = str_c(Team, Year),
+        AEWSOCC = factor(ifelse(ID %in% AEWSOCC, "True", "False"), levels=c("True", "False"))
+      ) |>
+      ungroup() 
+    ) 
+  ) |>
+  select(set, season)
+
+write_rds(pca_season, here("models", "results", "pca_season.rds"))

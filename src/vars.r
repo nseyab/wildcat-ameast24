@@ -178,14 +178,26 @@ AEWSOCC <- c(
 #---------------------------------
 ID <- c("ID", "Team", "Year", "Date", "Opp")
 
-RESPONSE <- c("Points", "Result", "PResult")
+RESPONSE <- c("PResult")
+
+CONTROL <- c(
+  "xG",
+  "xGA",
+  "AvgSxG", #Average Shot xG
+  "AvgSAxG", #Average Shot Against xG 
+  "Tempo",
+  "AvgPP", #Average Passes per Possession
+  "PPDA",
+  "ASD", #Average Shot Distance
+  "APL" #Average Pass Length
+)
 
 EFFICIENCY <- c(
   "SoTP", #Shots on Target %
   "PAwSP", #Positional Attacks with Shot %
-  "CAwSP", #Counterattacks with Shots %
+  # "CAwSP", #Counterattacks with Shots %
   "CwSP", #Corners with Shot %
-  "FKwSP", #Free Kicks with Shot %
+  # "FKwSP", #Free Kicks with Shot %
   "CAP", #Crosses Accurate %
   "ODWP", #Offensive Duels Won %
   "SAoTP", #Shots Against on Target %
@@ -202,7 +214,7 @@ EFFICIENCY <- c(
   "LongPAP", #Long Passes Accurate %
   "PtFTAP", #Passes to Final Third Accurate %
   "ProgPAP", #Progressive Passes Accurate %
-  "SmPAP", #Smart Passes Accurate %
+  # "SmPAP", #Smart Passes Accurate %
   "TIAP" #Throw Ins Accurate %
 )
 
@@ -211,17 +223,17 @@ VOLUME <- c(
   "SoT", #Shots on Target
   "Positional_Attacks",
   "PAwS", #Positional Attacks with Shot
-  "Counterattacks",
-  "CAwS", #Counterattacks with Shots
+  # "Counterattacks",
+  # "CAwS", #Counterattacks with Shots
   "Corners",
   "CwS", #Corners with Shot
-  "Free_Kicks",
-  "FKwS", #Free Kicks with Shot
+  # "Free_Kicks",
+  # "FKwS", #Free Kicks with Shot
   "Crosses",
   "CA", #Crosses Accurate
   "Offensive_Duels",
   "ODW", #Offensive Duels Won
-  "Offsides",
+  # "Offsides",
   "Shots_Against",
   "SAoT", #Shots Against on Target
   "Defensive_Duels",
@@ -252,21 +264,11 @@ VOLUME <- c(
   "PtFTA", #Passes to Final Third Accurate
   "Progressive_Passes",
   "ProgPA", #Progressive Passes Accurate
-  "Smart_Passes",
-  "SmPA", #Smart Passes Accurate
+  # "Smart_Passes",
+  # "SmPA", #Smart Passes Accurate
   "Throw_Ins",
   "TIA", #Throw Ins Accurate
   "Goal_Kicks"
-)
-
-IDENTITY <- c(
-  "xG",
-  "xGA",
-  "Tempo",
-  "AvgPP", #Average Passes per Possession
-  "PPDA",
-  "ASD", #Average Shot Distance
-  "APL" #Average Pass Length
 )
 
 
@@ -285,10 +287,10 @@ theme_set(
   theme(
     legend.position = "None",
     axis.line = element_line(color="#DCDEDF"),
-    axis.text = element_text(family = "ssp", size = 40, color="#263645"),
+    axis.text = element_text(family = "ssp", size = 28, color="#263645"),
     axis.text.x = element_blank(),
     axis.text.y = element_blank(),
-    axis.title = element_text(family = "lora", size = 54, color = "#263645"),
+    axis.title = element_text(family = "lora", size = 40, color = "#263645"),
     axis.ticks = element_blank(),
     plot.caption = ggtext::element_markdown(family = "ssp", size = 54, face = "bold", color = "#263645"),
     plot.title = element_text(family = "lora", size = 72, face = "bold", color = "#263645"),
