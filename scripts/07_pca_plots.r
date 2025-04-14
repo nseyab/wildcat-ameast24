@@ -21,8 +21,8 @@ ctrl <- tibble(
 eff <- tibble(
   PC = c("PC08", "PC05"),
   title = c("Chance Creation", "Defensive Efficiency"), 
-  high = c("Efficient Chance Creation", "Wasteful Chances"),
-  low = c("Effective Defending", "Efficient, Desperate Defending & Opp Accurate Shots")
+  high = c("Efficient Chance Creation", "Effective Defending"),
+  low = c("Wasteful Chances", "Efficient, Desperate Defending & Opp Accurate Shots")
 )
 
 vol <- tibble(
