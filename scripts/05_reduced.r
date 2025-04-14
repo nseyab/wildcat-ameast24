@@ -36,7 +36,7 @@ loadings <- class |>
   ) |> 
   pull(loadings)
 
-tau <- c(0.5, 0.333, 0.25, 0.2, 0)
+tau <- c(0.75, 0.5, 0.333, 0.25, 0.2, 0)
 
 reduced_class <- loadings |> 
   map2(season$season, ~ map_dfr(tau, function(thresh) {
@@ -53,7 +53,7 @@ reduced_class <- loadings |>
 
     acc_train <- yardstick::accuracy(preds, truth = AEWSOCC, estimate = .pred)$.estimate
 
-    resamples <- vfold_cv(data, v = 7, repeats = 6, strata = AEWSOCC)
+    resamples <- vfold_cv(data, v = 7, repeats = 11, strata = AEWSOCC)
 
     rec <- recipe(AEWSOCC ~ ., data = data) |>
       update_role(ID, Team, Year, new_role = "id")
@@ -80,7 +80,7 @@ reduced_class <- loadings |>
   }))
 
 comparison <- tibble(set = c("Control", "Efficiency", "Volume"), res = reduced_class) |> unnest(res)
-reduced_pcs <- tibble(set = c("Control", "Efficiency", "Volume"), LD = loadings, best_n = c(3, 2, 3)) |>
+reduced_pcs <- tibble(set = c("Control", "Efficiency", "Volume"), LD = loadings, best_n = c(3, 3, 3)) |>
   mutate(LD = map2(LD, best_n, ~ slice_head(.x, n=.y))) |>
   select(set, LD) |>
   unnest(LD)

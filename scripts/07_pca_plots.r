@@ -19,10 +19,10 @@ ctrl <- tibble(
 )
 
 eff <- tibble(
-  PC = c("PC08", "PC05"),
-  title = c("Chance Creation", "Defensive Efficiency"), 
-  high = c("Efficient Chance Creation", "Effective Defending"),
-  low = c("Wasteful Chances", "Efficient, Desperate Defending & Opp Accurate Shots")
+  PC = c("PC09", "PC06", "PC04"),
+  title = c("Defensive Efficiency", "Offensive -vs- Defensive Balance", "Possessive -vs- Transitional"), 
+  high = c("Low Opp Shot Accuracy", "Accurate Shots", "Efficient Chance Creation"),
+  low = c("Aerial Efficiency & Opp Accurate Shots", "Playing Back & Efficient Defending", "Accurate Passing (Long and to Final Third)")
 )
 
 vol <- tibble(

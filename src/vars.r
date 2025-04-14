@@ -208,6 +208,12 @@ EFFICIENCY <- c(
   "Possession",
   "DWP", #Duels Won %
   "LongPP", #Long Pass Percentage
+  "FwdPP", #Forward Pass Percentage
+  "BackPP", #Back Pass Percentage
+  "LatPP", #Lateral Pass Percentage
+  "PtFTPP", #Passes to Final Third Pass Percentage
+  "ProgPP", #Progressive Passes Pass Percentage
+  # "SmPP", #Smart Passes Pass Percentage
   "FwdPAP", #Forward Passes Accurate %
   "BackPAP", #Back Passes Accurate %
   "LatPAP", #Lateral Passes Accurate %

@@ -345,6 +345,7 @@ plot_pcs_xy <- function(labs, data) {
   ylab <- labs$title[2]
 
   offset_x <- 0.05 * lim
+  offset_y <- 0.29 * lim
 
   p <- data |>
     filter(str_detect(ID, "UNH|24")) |>
@@ -363,13 +364,13 @@ plot_pcs_xy <- function(labs, data) {
     annotate("text", x = lim, y = offset_x, label = str_wrap(labs$high[1], width = 20), 
              hjust = 1, vjust = 0, angle = 0, size = 8, lineheight=0.4) +
     # y-axis annotations: low (bottom) and high (top) at x = 0
-    annotate("text", x = 0, y = -lim, label = str_wrap(labs$low[2], width = 32), 
+    annotate("text", x = -offset_y, y = -lim, label = str_wrap(labs$low[2], width = 14), 
              hjust = 0.5, vjust = 0.5, angle = 0, size = 8, lineheight=0.4) +
-    annotate("text", x = 0, y = lim, label = str_wrap(labs$high[2], width = 40), 
+    annotate("text", x = offset_y, y = lim, label = str_wrap(labs$high[2], width = 14), 
              hjust = 0.5, vjust = 0.5, angle = 0, size = 8, lineheight=0.4) +
     
-    scale_x_continuous(limits = c(-lim, lim), expand = expansion(mult = c(0.05, 0.05))) +
-    scale_y_continuous(limits = c(-lim, lim), expand = expansion(mult = c(0.05, 0.05))) +
+    scale_x_continuous(limits = c(-lim, lim), expand = expansion(mult = c(0.07, 0.07))) +
+    scale_y_continuous(limits = c(-lim, lim), expand = expansion(mult = c(0.07, 0.07))) +
     coord_fixed() +
     scale_shape_manual(values = c(24, 25)) +
     scale_alpha_manual(values = c(0.4, 0.4, 1)) +
