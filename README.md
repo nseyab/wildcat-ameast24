@@ -1,7 +1,6 @@
 # UNH Women's Soccer vs America East Rivals: Defining Style Through Data
 
-## How do we play? How do they play? 
-## And where can we get better?
+## How do we play? How do they play? And where can we get better?
 
 Comparing UNH to every team in America East during the 2024 season to find what makes us different and what will help us win in 2025.
 
@@ -35,7 +34,7 @@ Comparing UNH to every team in America East during the 2024 season to find what 
     - Support Vector Machine (SVM) with linear kernel
     - Logistic Regression (initially included but later removed due to convergence issues with small data)
 - Resampling:
-    - v-fold cross-validation (v=7)
+    - v-fold cross-validation
     - Evaluation metric: Accuracy
 
 #### Reduced Models for Interpretability
